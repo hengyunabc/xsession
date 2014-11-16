@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  * <pre>
- * 在web.xml里配置一个XSessionFilter，这个Filter有两个配置参数：
- * propertiesFilePath          优先加载的properties文件路径
- * propertiesFilePath 支持类似${environment:dev}这样的配置。
+ * 在web.xml里配置一个XSessionFilter，这个Filter有一个配置参数：
+ * propertiesFilePath 加载的properties文件路径，支持类似${environment:dev}这样的配置。
+ * 可以通过启动时的JVM参数来在不同环境下加载不同的配置文件。比如 -Denvironment=product。
  * 
- * 主要有下面的配置项：
+ * 在properties文件里可以配置其它的参数。主要有下面的配置项：
  * sessionCookieName  sessionId在cookie的key名字，默认是sessionId
  * sessionCookieHttpOnly   设置session cookie为HttpOnly，默认为true
  * sessionMaxInactiveInterval   session在缓存的最大不活跃存活时间，默认是30分钟。
