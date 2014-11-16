@@ -52,4 +52,12 @@ java.lang.NoSuchMethodError: javax.servlet.http.Cookie.setHttpOnly(Z)V
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 ```
+
+配置src/main/resources/xSessionFilter-dev.properties
+```
+#redisSessionStore.jedis.address=10.0.0.1:6379,10.0.0.2:6379,10.0.0.3:6379
+redisSessionStore.jedis.address=127.0.0.1:6379
+
+sessionMaxInactiveInterval=1800
+```
 具体的例子请参考xsession-example。
