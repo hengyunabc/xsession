@@ -10,6 +10,8 @@ import java.util.Properties;
 public interface SessionStore {
 
 	public void init(Properties properties);
+
+	public XSession createSession();
 	
 	public XSession loadSession(String id);
 	

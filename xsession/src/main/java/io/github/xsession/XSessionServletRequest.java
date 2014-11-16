@@ -60,10 +60,10 @@ public class XSessionServletRequest extends HttpServletRequestWrapper {
 				}
 			}
 		}
-		//cookie中没有sessionId，或者从缓存服务器中查找不到，则创建新的Session
+		// cookie中没有sessionId，或者从缓存服务器中查找不到，则创建新的Session
 		if (session == null) {
 			// TODO 这里初始化还没有完成
-			this.session = new XSession(true);
+			this.session = sessionStore.createSession();
 			this.session.setMaxInactiveInterval(sessionMaxInactiveInterval);
 		}
 		return session;

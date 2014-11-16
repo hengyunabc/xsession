@@ -23,7 +23,9 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * redisSessionStore.sessionKeyPrefix        sessionId存储到redis上的key的前缀，默认是 __s|
  * redisSessionStore.jedis.address           redis集群的地址，如：127.0.0.1:6379,192.168.66.66:6379
  * </pre>
+ * 
  * TODO 增加其它的一些配置？比如超时等
+ * 
  * @author hengyunabc
  * 
  */
@@ -45,8 +47,14 @@ public class RedisSessionStore implements SessionStore {
 	 */
 	long largeValueDetectSize = 1024 * 1024;
 
+	int sessionIdLength = XSessionFilter.DEFAULT_SESSIONID_LENGTH;
+
 	@Override
 	public void init(Properties properties) {
+		String temp_sessionIdLength = (String) properties.get("sessionIdLength");
+		if (temp_sessionIdLength != null) {
+			this.sessionIdLength = Integer.parseInt(temp_sessionIdLength);
+		}
 
 		String detectSizeString = (String) properties.get("redisSessionStore.largeValueDetectSize");
 		if (detectSizeString != null) {
@@ -103,8 +111,8 @@ public class RedisSessionStore implements SessionStore {
 				byte[] data = serializer.toData(session.getAttributeMap());
 				jedis.set(key, data);
 				session.setChanged(false);
-				//TODO 这里的逻辑要改进，commit之后，response再commit？
-//				session.setNew(false);
+				// TODO 这里的逻辑要改进，commit之后，response再commit？
+				// session.setNew(false);
 			}
 			// 更新缓存的失效时间，TODO，是否需要合成一个请求里完成？
 			jedis.expire(key, session.getMaxInactiveInterval());
@@ -155,8 +163,8 @@ public class RedisSessionStore implements SessionStore {
 			}
 			@SuppressWarnings("unchecked")
 			Map<String, Object> attributeMap = (Map<String, Object>) serializer.fromData(data);
-			//从缓存加载的session不是new的
-			XSession xSession = new XSession(false);
+			// 从缓存加载的session不是new的
+			XSession xSession = new XSession(false, sessionIdLength);
 			xSession.setId(id);
 			xSession.setAttributeMap(attributeMap);
 			return xSession;
@@ -201,6 +209,11 @@ public class RedisSessionStore implements SessionStore {
 
 	public byte[] getSessionCacheKey(XSession session) {
 		return getSessionCacheKey(session.getId());
+	}
+
+	@Override
+	public XSession createSession() {
+		return new XSession(true, sessionIdLength);
 	}
 
 }

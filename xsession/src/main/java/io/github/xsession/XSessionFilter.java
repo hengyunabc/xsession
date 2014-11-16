@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
  * sessionCookieHttpOnly   设置session cookie为HttpOnly，默认为true
  * sessionMaxInactiveInterval   session在缓存的最大不活跃存活时间，默认是30分钟。
  * sessionCookieExpires   session cookie在浏览器的失效时间，默认是1天，即60*60*24秒
+ * sessionIdLength        sessionId的长度，默认是32个随机字母
  * sessionStoreClass  存储session的类的名字，要实现{@link SessionStore}接口。默认是{@link io.github.xsession.RedisSessionStore}
  * properties配置文件里的配置会传递给{@link SessionStore#init(Properties)}函数，进行初始化。
  * 
@@ -71,6 +72,8 @@ public class XSessionFilter implements Filter {
 	public static String DEFAULT_SESSIONSTORE_ATTRIBUTE_NAME = "__sessionStore";
 
 	public static int DEFAULT_SESSIONCOOKIEEXPIRES = 60 * 60 * 24;
+	
+	public static int DEFAULT_SESSIONID_LENGTH = 32;
 
 	// Session的最大不活跃存活时间
 	int sessionMaxInactiveInterval = XSession.DEFAULT_MAXINACTIVEINTERVAL;
@@ -86,7 +89,7 @@ public class XSessionFilter implements Filter {
 	String sessionCookieName = DEFAULT_SESSION_COOKIE;
 
 	SessionStore sessionStore;
-
+	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;

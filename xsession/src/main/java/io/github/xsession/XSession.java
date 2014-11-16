@@ -1,10 +1,11 @@
 package io.github.xsession;
 
+import io.github.xsession.util.SessionIdGenerator;
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -32,15 +33,15 @@ public class XSession implements HttpSession {
 
 	// 标记这个Session的attributeMap 数据是否更新过
 	boolean changed = false;
-
-	public XSession(boolean isNew) {
+	
+	public XSession(boolean isNew, int sessionIdLength) {
 		if (isNew) {
 			// 如果不是从缓存中加载Session，则要设置创建时间，并生成id
 			long creationTime = System.currentTimeMillis();
 			// 把创建时间放到attributeMap里
 			this.attributeMap.put(DEFAULT_CREATIONTIME_ATTRIBUTE_NAME, creationTime);
 			this.attributeMap.put(DEFAULT_MAXINACTIVEINTERVAL_ATTRIBUTE_NAME, DEFAULT_MAXINACTIVEINTERVAL);
-			this.id = UUID.randomUUID().toString();
+			this.id = SessionIdGenerator.generateSessionId(sessionIdLength);
 
 			this.changed = true;
 			this.isNew = true;
