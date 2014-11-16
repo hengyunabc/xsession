@@ -1,7 +1,7 @@
 
 
 ### 环境要求
-用到servlet3里的javax.servlet.http.Cookie.setHttpOnly方，所以pom.xml里的javax.servlet-api依赖要是3.0以上的。
+用到servlet3里的javax.servlet.http.Cookie.setHttpOnly()方法，所以pom.xml里的javax.servlet-api依赖要是3.0以上的。
 
 运行环境要求是tomcat7或者jetty8以上版本。
 ```xml
